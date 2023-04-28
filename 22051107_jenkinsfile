@@ -20,15 +20,10 @@ pipeline {
 			}
 		}
 	    steps {
-				sh '''#!/bin/bash
-				puppet resource file /tmp/clone ensure=absent force=true;
-				puppet resource file /tmp/clone ensure=directory;
-				cd /tmp/clone;
-				git clone https://github.com/seanczw/22051107_repo.git;
-				targets=22051107-websvr.localdomain;
-				locate_script='/tmp/clone/22051107_repo/22051107_script';
-				bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;				'''
+				sh '''
+				script run $WORKSPACE/22051107_script -t 22051107-websvr.localdomain -u clientadm -p user123 --no-host-key-check --run-as root;
 				echo "22051107 STG2 - Push to production web server completed"
+				'''
 			}
 	  }
 
