@@ -1,0 +1,78 @@
+pipeline {
+      agent any
+ 
+ stages {
+          stage('22051107 STG1') {
+          steps {
+		input('Push change to production web server?')
+            echo '22051107 STG1: Push change to production web server?'
+            ok "Yes"
+          }
+        }
+        
+	
+	stage('22051107 STG2') {
+	when {
+		not {
+			branch "Development NOT updated"
+			}
+		}
+	    steps {
+                 sh '''#!/bin/bash
+		puppet resource file /tmp/clone ensure=absent force=true;
+		puppet resource file /tmp/clone ensure=directory;
+		cd  /tmp/clone;
+		git clone https://github.com/seanczw/22051107_repo.git;
+                 targets=22051107-websvr;
+                 locate_script='/tmp/clone/22051107_repo/index.html';
+                 bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
+                 '''
+                 echo "Development container updated"
+          }
+	  }
+
+
+      stage('22051107 STG3') {
+          steps {
+		input('Proceed to test production web service?')
+            echo '22053351 STG3: Proceed to test production web service?'
+            ok "Yes"
+          }
+       
+
+}
+
+
+      stage('22051107 STG4') {
+          steps {
+	  	sh ''' #!/bin/bash
+		curl -Is http://22051107-websvr.localdomain | head -n 1 > /tmp/web-test-result
+		cat /tmp/web-test-result
+		'''
+	    echo '22051107 STG4: Production web server testing completed'
+          }
+}
+
+
+      stage('22051107 STG5') {
+          steps {
+	input('Proceed or Abort?')
+            echo '22051107 STG5: Web server testing result has been inspected'
+	  
+          }
+}
+
+
+      stage('22051107 STG6') {
+          steps {
+
+            echo '22051107 STG6: Production Operation is successful'
+	  
+          }
+}
+
+
+
+
+}
+}
