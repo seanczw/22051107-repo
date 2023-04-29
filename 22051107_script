@@ -8,4 +8,4 @@ puppet resource file /tmp/22051107/clone ensure=absent force=true
 puppet resource file /tmp/22051107/clone ensure=directory
 cd /tmp/22051107/clone
 git clone https://github.com/seanczw/22051107_repo.git
-cp -p /tmp/22051107/clone/22051107_repo/22051107_index.html /var/www//html/index.html
+cp -p /tmp/22051107/clone/22051107_repo/22051107_index.html /var/www/html/index.html
