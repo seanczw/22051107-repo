@@ -7,5 +7,5 @@ puppet resource file /tmp/22051107 ensure=directory
 puppet resource file /tmp/22051107/clone ensure=absent force=true
 puppet resource file /tmp/22051107/clone ensure=directory
 cd /tmp/22051107/clone
-git clone https://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@github.com/seanczw/22051107_repo.git
+git clone https://github.com/seanczw/22051107_repo.git
 cp -p /tmp/22051107/clone/22051107_repo/22051107_index.html /var/www//html/index.html
